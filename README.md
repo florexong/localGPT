@@ -1,5 +1,14 @@
 # LocalGPT: Secure, Local Conversations with Your Documents 🌐
 
+
+[![GitHub Stars](https://img.shields.io/github/stars/PromtEngineer/localGPT?style=social)](https://github.com/PromtEngineer/localGPT/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/PromtEngineer/localGPT?style=social)](https://github.com/PromtEngineer/localGPT/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/PromtEngineer/localGPT)](https://github.com/PromtEngineer/localGPT/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/PromtEngineer/localGPT)](https://github.com/PromtEngineer/localGPT/pulls)
+[![License](https://img.shields.io/github/license/PromtEngineer/localGPT)](https://github.com/PromtEngineer/localGPT/blob/main/LICENSE)
+
+🚨🚨 You can run localGPT on a pre-configured [Virtual Machine](https://bit.ly/localGPT). Make sure to use the code: PromptEngineering to get 50% off. I will get a small commision!
+
 **LocalGPT** is an open-source initiative that allows you to converse with your documents without compromising your privacy. With everything running locally, you can be assured that no data ever leaves your computer. Dive into the world of secure, local document interactions with LocalGPT.
 
 ## Features 🌟
@@ -69,14 +78,14 @@ For `NVIDIA` GPUs support, use `cuBLAS`
 
 ```shell
 # Example: cuBLAS
-CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python==0.1.83 --no-cache-dir
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python --no-cache-dir
 ```
 
 For Apple Metal (`M1/M2`) support, use
 
 ```shell
 # Example: METAL
-CMAKE_ARGS="-DLLAMA_METAL=on"  FORCE_CMAKE=1 pip install llama-cpp-python==0.1.83 --no-cache-dir
+CMAKE_ARGS="-DLLAMA_METAL=on"  FORCE_CMAKE=1 pip install llama-cpp-python --no-cache-dir
 ```
 For more details, please refer to [llama-cpp](https://github.com/abetlen/llama-cpp-python#installation-with-openblas--cublas--clblast--metal)
 
@@ -85,7 +94,7 @@ For more details, please refer to [llama-cpp](https://github.com/abetlen/llama-c
 Installing the required packages for GPU inference on NVIDIA GPUs, like gcc 11 and CUDA 11, may cause conflicts with other packages in your system.
 As an alternative to Conda, you can use Docker with the provided Dockerfile.
 It includes CUDA, your system just needs Docker, BuildKit, your NVIDIA GPU driver and the NVIDIA container toolkit.
-Build as `docker build . -t localgpt`, requires BuildKit.
+Build as `docker build -t localgpt .`, requires BuildKit.
 Docker BuildKit does not support GPU during *docker build* time right now, only during *docker run*.
 Run as `docker run -it --mount src="$HOME/.cache",target=/root/.cache,type=bind --gpus=all localgpt`.
 
@@ -94,7 +103,7 @@ Run as `docker run -it --mount src="$HOME/.cache",target=/root/.cache,type=bind 
 For testing, this repository comes with [Constitution of USA](https://constitutioncenter.org/media/files/constitution.pdf) as an example file to use.
 
 ## Ingesting your OWN Data.
-Put you files in the `SOURCE_DOCUMENTS` folder. You can put multiple folders within the `SOURCE_DOCUMENTS` folder and the code will recursively read your files.
+Put your files in the `SOURCE_DOCUMENTS` folder. You can put multiple folders within the `SOURCE_DOCUMENTS` folder and the code will recursively read your files.
 
 ### Support file formats:
 LocalGPT currently supports the following file formats. LocalGPT uses `LangChain` for loading these file formats. The code in `constants.py` uses a `DOCUMENT_MAP` dictionary to map a file format to the corresponding loader. In order to add support for another file format, simply add this dictionary with the file format and the corresponding loader from [LangChain](https://python.langchain.com/docs/modules/data_connection/document_loaders/).
@@ -193,6 +202,11 @@ Another option is to enable chat history. ***Note***: This is disabled by defaul
 python run_localGPT.py --use_history
 ```
 
+You can store user questions and model responses with flag `--save_qa` into a csv file `/local_chat_history/qa_log.csv`. Every interaction will be stored. 
+
+```shell
+python run_localGPT.py --save_qa
+```
 
 # Run the Graphical User Interface
 

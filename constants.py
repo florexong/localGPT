@@ -5,7 +5,8 @@ from chromadb.config import Settings
 
 # https://python.langchain.com/en/latest/modules/indexes/document_loaders/examples/excel.html?highlight=xlsx#microsoft-excel
 from langchain.document_loaders import CSVLoader, PDFMinerLoader, TextLoader, UnstructuredExcelLoader, Docx2txtLoader
-from langchain.document_loaders import UnstructuredFileLoader
+from langchain.document_loaders import UnstructuredFileLoader, UnstructuredMarkdownLoader
+from langchain.document_loaders import UnstructuredHTMLLoader
 
 
 # load_dotenv()
@@ -28,7 +29,7 @@ CHROMA_SETTINGS = Settings(
 )
 
 # Context Window and Max New Tokens
-CONTEXT_WINDOW_SIZE = 4096
+CONTEXT_WINDOW_SIZE = 8096
 MAX_NEW_TOKENS = CONTEXT_WINDOW_SIZE  # int(CONTEXT_WINDOW_SIZE/4)
 
 #### If you get a "not enough space in the buffer" error, you should reduce the values below, start with half of the original values and keep halving the value until the error stops appearing
@@ -43,8 +44,9 @@ N_BATCH = 512
 
 # https://python.langchain.com/en/latest/_modules/langchain/document_loaders/excel.html#UnstructuredExcelLoader
 DOCUMENT_MAP = {
+    ".html": UnstructuredHTMLLoader,
     ".txt": TextLoader,
-    ".md": TextLoader,
+    ".md": UnstructuredMarkdownLoader,
     ".py": TextLoader,
     # ".pdf": PDFMinerLoader,
     ".pdf": UnstructuredFileLoader,
@@ -98,8 +100,19 @@ EMBEDDING_MODEL_NAME = "hkunlp/instructor-large"  # Uses 1.5 GB of VRAM (High Ac
 # MODEL_ID = "TheBloke/Llama-2-13b-Chat-GGUF"
 # MODEL_BASENAME = "llama-2-13b-chat.Q4_K_M.gguf"
 
-MODEL_ID = "TheBloke/Llama-2-7b-Chat-GGUF"
-MODEL_BASENAME = "llama-2-7b-chat.Q4_K_M.gguf"
+# MODEL_ID = "TheBloke/Llama-2-7b-Chat-GGUF"
+# MODEL_BASENAME = "llama-2-7b-chat.Q4_K_M.gguf"
+
+# MODEL_ID = "QuantFactory/Meta-Llama-3-8B-Instruct-GGUF"
+# MODEL_BASENAME = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf"
+
+# LLAMA 3 # use for Apple Silicon
+MODEL_ID = "meta-llama/Meta-Llama-3-8B-Instruct"
+MODEL_BASENAME = None
+
+# LLAMA 3 # use for NVIDIA GPUs
+# MODEL_ID = "unsloth/llama-3-8b-bnb-4bit"
+# MODEL_BASENAME = None
 
 # MODEL_ID = "TheBloke/Mistral-7B-Instruct-v0.1-GGUF"
 # MODEL_BASENAME = "mistral-7b-instruct-v0.1.Q8_0.gguf"
@@ -176,3 +189,11 @@ MODEL_BASENAME = "llama-2-7b-chat.Q4_K_M.gguf"
 # MODEL_BASENAME = "wizard-vicuna-13B.ggmlv3.q2_K.bin"
 # MODEL_ID = "TheBloke/orca_mini_3B-GGML"
 # MODEL_BASENAME = "orca-mini-3b.ggmlv3.q4_0.bin"
+
+####
+#### (FOR AWQ QUANTIZED) Select a llm model based on your GPU and VRAM GB. Does not include Embedding Models VRAM usage.
+### (*** MODEL_BASENAME is not actually used but have to contain .awq so the correct model loading is used ***)
+### (*** Compute capability 7.5 (sm75) and CUDA Toolkit 11.8+ are required ***)
+####
+# MODEL_ID = "TheBloke/Llama-2-7B-Chat-AWQ"
+# MODEL_BASENAME = "model.safetensors.awq"
